@@ -1,7 +1,137 @@
 ---
 title: "data-vis-presentation"
-format: "revealjs"
+format: 
+  revealjs:
+    theme: league
+    slide-number: c/t
+    css: style.css
 ---
+
+
+## Introduction
+
+
+- trained as a freshwater ecologist
+- using R and python for almost 20 years
+- worked for Monash University, EPA and DJSIR
+- Data Analyst for last 10 years
+
+
+
+## Department of Jobs Skills and Industry 
+
+
+
+
+## Creative Industries {background-color="white"}
+
+
+:::: {.v-center-container}
+<iframe src="https://creative.vic.gov.au/__data/assets/git_bridge/0003/2168544/landing_employment.html" scrolling="yes" style="height: 579px;" width="100%"></iframe>
+::::
+
+
+
+
+
+
+## Creative Industries {background-color="white"}
+
+
+:::: {.v-center-container}
+<iframe src="https://creative.vic.gov.au/__data/assets/git_bridge/0003/2168544/business02_totshare.html" scrolling="yes" style="height: 434px;" width="100%"></iframe>
+::::
+
+
+
+
+## Victorian tourism {background-color="white"}
+
+:::: {.v-center-container}
+<iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_charts_02.html" title="Domestic day data" style="height: 500px;" width="100%"></iframe>
+::::
+
+
+
+
+## Victorian tourism {background-color="white"}
+
+:::: {.v-center-container}
+<iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_jumbo.html" title="Victorian tourism overview data" style="height: 400px;" width="100%"></iframe>
+::::
+
+
+
+
+## Victorian tourism {background-color="white"}
+
+:::: {.v-center-container}
+<iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/dashboard_tourism_visitors.html" title="Tourism visitors summary widget" style="height: 567px;" width="100%"></iframe>
+::::
+
+
+
+
+
+
+
+## Why R for Data Visualisation
+
+
+
+
+
+## Charting Libraries
+
+
+:::: {.columns}
+
+
+::: {.column width="40%"}
+
+
+::: {.fragment fragment-index=1}
+- ggplot2
+:::
+
+::: {.fragment fragment-index=2}
+- ggiraph
+:::
+
+::: {.fragment fragment-index=3}
+- htmlwidgets
+:::
+
+
+:::
+
+::: {.column width="60%"}
+
+::: {.fragment .fade-in-then-out fragment-index=1 }
+ggplot2 image
+:::
+
+::: {.fragment .fade-in-then-out fragment-index=2}
+ggiraph image
+:::
+
+::: {.fragment .fade-in-then-out fragment-index=3}
+htmlwidgets image
+:::
+
+
+
+
+:::
+
+::::
+
+
+
+
+
+
+
 
 ## Quarto
 

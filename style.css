@@ -1,0 +1,7 @@
+/* file: style.css */
+.v-center-container {
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  width: 100%;
+}
