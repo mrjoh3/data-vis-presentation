@@ -8,6 +8,27 @@ format:
 ---
 
 
+```{r}
+
+library(leaflet)
+library(leaflet.providers)
+
+
+lat = -37.730202
+lon = 145.042387
+
+basemap <- leaflet() %>%
+  addProviderTiles("CartoDB.Positron", group = 'Default') |>
+  addProviderTiles("Esri.WorldImagery", group = 'Esri Imagery') |>
+  setView(lng = lon, lat = lat, zoom = 14) 
+
+
+```
+
+
+
+
+
 ## Introduction
 
 
@@ -48,7 +69,7 @@ format:
 ## Victorian tourism {background-color="white"}
 
 :::: {.v-center-container}
-<iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_charts_02.html" title="Domestic day data" style="height: 500px;" width="100%"></iframe>
+<iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_charts_02.html" title="Domestic day data" style="height: 420px;" width="100%"></iframe>
 ::::
 
 
@@ -76,6 +97,82 @@ format:
 
 
 ## Why R for Data Visualisation
+
+
+
+:::: {.columns}
+
+
+::: {.column width="60%"}
+
+R is not just for statistics
+
+::: {.fragment .fade-in-then-out fragment-index=1}
+
+* Active Community
+* Extensive capabilities
+* structured way to organise work
+* Diverse reporting and web capabilities
+
+:::
+
+
+
+:::
+
+::: {.column width="40%"}
+
+:::: {.absolute bottom=0}
+![](img/Rlogo.svg){fig-align="center"}
+
+::::
+
+
+:::
+
+::::
+
+
+
+
+## Why R for Data Visualisation
+
+
+
+:::: {.columns}
+
+
+::: {.column width="60%"}
+
+R is not just for statistics
+
+
+
+::: {.fragment fragment-index=1}
+
+- charting libraries
+- publication frameworks
+  * rmarkdown
+  * quarto
+  * shiny
+  
+:::
+
+:::
+
+::: {.column width="40%"}
+
+:::: {.absolute bottom=0}
+![](img/Rlogo.svg){fig-align="center"}
+
+::::
+
+
+:::
+
+::::
+
+
 
 
 

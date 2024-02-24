@@ -1,7 +1,18 @@
 /* file: style.css */
 .v-center-container {
+  display: flex;
   justify-content: center;
   align-items: center;
   height: 90%;
   width: 100%;
 }
+
+
+.v-bottom-container {
+  display: flex;
+  justify-content: bottom;
+  align-items: bottom;
+  height: 90%;
+  width: 100%;
+}
+
