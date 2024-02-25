@@ -9,6 +9,67 @@ format:
 
 
 ```{r}
+# clean old packages
+df <- installed.packages() |> as.data.frame()
+
+versions <- unique(df$Built) |> sort(decreasing = TRUE)
+current <- versions[1]
+
+# pkgs <- split(df, df$Package)
+# 
+# 
+# lapply(pkgs, function(p){
+#   if (nrow(p) == 1){
+#     if (p$Built != current) {
+#       tryCatch({
+#         install.packages(p$Package)
+#       }, error = function(e){print(
+#         paste(p$Package, e)
+#       )})
+#     }
+#   } else if (nrow(p) > 1) {
+#     pk <- p[p$Built != current,]
+#     for (i in 1:nrow(pk)) {
+#       tryCatch({
+#         remove.packages(pk[i, "Package"], lib=pk[i, "LibPath"])
+#       }, error = function(e){print(paste(
+#         'removed',
+#         pk[i, "Package"]
+#       ))})
+#     }
+#   }
+# })
+
+
+
+p3 <- df[df$Built == "3.5.1",]
+
+for (x in 1:nrow(p3)) {
+  pkg <- p3[x, "Package"]
+  n <- sum(df$Package == pkg)
+  
+  if (n == 1) {
+      tryCatch({
+        install.packages(p3[x, "Package"])
+      }, error = function(e){print(
+        paste(p3[x, "Package"], e)
+      )})
+  } else {
+      tryCatch({
+        remove.packages(p3[x, "Package"], lib=p3[x, "LibPath"])
+      }, error = function(e){print(paste(
+        'removed',
+        p3[x, "Package"]
+      ))})
+  }
+}
+  
+```
+
+
+
+
+```{r}
 
 library(leaflet)
 library(leaflet.providers)
@@ -19,8 +80,12 @@ lon = 145.042387
 
 basemap <- leaflet() %>%
   addProviderTiles("CartoDB.Positron", group = 'Default') |>
-  addProviderTiles("Esri.WorldImagery", group = 'Esri Imagery') |>
-  setView(lng = lon, lat = lat, zoom = 14) 
+  #addProviderTiles("Esri.WorldImagery", group = 'Esri Imagery') |>
+  setView(lng = lon, lat = lat, zoom = 10) 
+
+
+
+emp <- readabs::read_series()
 
 
 ```
@@ -34,13 +99,22 @@ basemap <- leaflet() %>%
 
 - trained as a freshwater ecologist
 - using R and python for almost 20 years
-- worked for Monash University, EPA and DJSIR
 - Data Analyst for last 10 years
+- worked for Monash University, EPA and DJSIR
+
 
 
 
 ## Department of Jobs Skills and Industry 
 
+
+- data analysis
+- economic analysis
+- data driven web content
+
+
+
+![](https://djsir.vic.gov.au/__data/assets/image/0003/1750152/logo-djsir-black.png){.absolute bottom=0 right=50 width="219" height="66"}
 
 
 
@@ -48,7 +122,7 @@ basemap <- leaflet() %>%
 
 
 :::: {.v-center-container}
-<iframe src="https://creative.vic.gov.au/__data/assets/git_bridge/0003/2168544/landing_employment.html" scrolling="yes" style="height: 579px;" width="100%"></iframe>
+<iframe src="https://creative.vic.gov.au/__data/assets/git_bridge/0003/2168544/landing_employment.html" scrolling="yes" style="height: 579px;" width="80%"></iframe>
 ::::
 
 
@@ -69,7 +143,7 @@ basemap <- leaflet() %>%
 ## Victorian tourism {background-color="white"}
 
 :::: {.v-center-container}
-<iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_charts_02.html" title="Domestic day data" style="height: 420px;" width="100%"></iframe>
+<iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_charts_02.html" title="Domestic day data" style="height: 420px;" width="80%"></iframe>
 ::::
 
 
