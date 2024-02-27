@@ -9,6 +9,8 @@ format:
 
 
 ```{r}
+#| eval: false
+
 # clean old packages
 df <- installed.packages() |> as.data.frame()
 
@@ -73,6 +75,9 @@ for (x in 1:nrow(p3)) {
 
 library(leaflet)
 library(leaflet.providers)
+library(readabs)
+library(ggplot2)
+library(highcharter)
 
 
 lat = -37.730202
@@ -84,9 +89,9 @@ basemap <- leaflet() %>%
   setView(lng = lon, lat = lat, zoom = 10) 
 
 
-
-emp <- readabs::read_series()
-
+# emp <- readabs::read_abs_series(c('A84423354L', 'A84423690X'))
+# save(emp, file = "emp.RData")
+load("emp.RData")
 
 ```
 
@@ -266,11 +271,11 @@ R is not just for statistics
 :::
 
 ::: {.fragment fragment-index=2}
-- ggiraph
+- highcharter
 :::
 
 ::: {.fragment fragment-index=3}
-- htmlwidgets
+- leaflet
 :::
 
 
@@ -279,15 +284,21 @@ R is not just for statistics
 ::: {.column width="60%"}
 
 ::: {.fragment .fade-in-then-out fragment-index=1 }
-ggplot2 image
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/ggplot2.png" 
+     align="right" 
+     width="200" 
+     style="max-width: 100%;">
 :::
 
 ::: {.fragment .fade-in-then-out fragment-index=2}
-ggiraph image
+<img src="https://jkunst.com/highcharter/logo.png" 
+     align="right" 
+     width="200" 
+     style="max-width: 100%;">
 :::
 
 ::: {.fragment .fade-in-then-out fragment-index=3}
-htmlwidgets image
+leaflet image
 :::
 
 
@@ -299,6 +310,60 @@ htmlwidgets image
 
 
 
+
+## ggplot2
+
+
+
+```{r}
+#| echo: true
+
+gg_emp <- emp |>
+  ggplot(aes(x = date, y = value, colour = series_type)) +
+  geom_line() +
+  labs(
+    title = "Victorian unemployment rate", 
+    subtitle = paste0("Data from ", format(min(emp$date), "%B %Y")),
+    y = "unemployment rate", x = "") 
+```
+
+
+```{r}
+#| fig-width: 14
+#| fig-height: 5
+#| fig-align: center
+gg_emp
+```
+
+
+## highcharter
+
+
+
+```{r}
+#| echo: true
+hc_emp <- emp |>
+  hchart(hcaes(x = date, y = value, group = series_type), type = "line") |>
+  hc_title(text = "Victorian unemployment rate") |>
+  hc_subtitle(text = paste0("Data from ", format(min(emp$date), "%B %Y"))) |>
+  hc_xAxis(title = list(text = NULL)) |>
+  hc_yAxis(title = list(text = "unemployment rate"))
+```
+
+
+```{r}
+hc_emp |>
+  hc_size(height = 300) |>
+  hc_add_theme(hc_theme_ggplot2())
+```
+
+
+
+## Links
+
+[https://ggplot2.tidyverse.org/index.html](https://ggplot2.tidyverse.org/index.html)
+
+[https://jkunst.com/highcharter/](https://jkunst.com/highcharter/)
 
 
 
