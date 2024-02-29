@@ -8,65 +8,7 @@ format:
 ---
 
 
-```{r}
-#| eval: false
 
-# clean old packages
-df <- installed.packages() |> as.data.frame()
-
-versions <- unique(df$Built) |> sort(decreasing = TRUE)
-current <- versions[1]
-
-# pkgs <- split(df, df$Package)
-# 
-# 
-# lapply(pkgs, function(p){
-#   if (nrow(p) == 1){
-#     if (p$Built != current) {
-#       tryCatch({
-#         install.packages(p$Package)
-#       }, error = function(e){print(
-#         paste(p$Package, e)
-#       )})
-#     }
-#   } else if (nrow(p) > 1) {
-#     pk <- p[p$Built != current,]
-#     for (i in 1:nrow(pk)) {
-#       tryCatch({
-#         remove.packages(pk[i, "Package"], lib=pk[i, "LibPath"])
-#       }, error = function(e){print(paste(
-#         'removed',
-#         pk[i, "Package"]
-#       ))})
-#     }
-#   }
-# })
-
-
-
-p3 <- df[df$Built == "3.5.1",]
-
-for (x in 1:nrow(p3)) {
-  pkg <- p3[x, "Package"]
-  n <- sum(df$Package == pkg)
-  
-  if (n == 1) {
-      tryCatch({
-        install.packages(p3[x, "Package"])
-      }, error = function(e){print(
-        paste(p3[x, "Package"], e)
-      )})
-  } else {
-      tryCatch({
-        remove.packages(p3[x, "Package"], lib=p3[x, "LibPath"])
-      }, error = function(e){print(paste(
-        'removed',
-        p3[x, "Package"]
-      ))})
-  }
-}
-  
-```
 
 
 
@@ -78,6 +20,9 @@ library(leaflet.providers)
 library(readabs)
 library(ggplot2)
 library(highcharter)
+library(tidyr)
+library(dplyr)
+library(sf)
 
 
 lat = -37.730202
@@ -90,9 +35,44 @@ basemap <- leaflet() %>%
 
 
 # emp <- readabs::read_abs_series(c('A84423354L', 'A84423690X'))
-# save(emp, file = "emp.RData")
-load("emp.RData")
+# save(data/emp, file = "emp.RData")
+load("data/emp.RData")
 
+# emp_region <- readabs::read_abs_series(c(
+#   "A84599659L",  
+#   "A84600019W",
+#   "A84600187J", 
+#   "A84599557X",
+#   "A84600115W",  
+#   "A84599851L",
+#   "A84599923L",  
+#   "A84600025T",
+#   "A84600193C",  
+#   "A84599665J",
+#   "A84600031L",  
+#   "A84599671C",
+#   "A84599677T",  
+#   "A84599683L",
+#   "A84599929A",  
+#   "A84600121T",
+#   "A84600037A"
+# ))
+# save(data/emp_region, file = "emp_region.RData")
+load("data/emp_region.RData")
+
+sa4 <- sf::read_sf("data/SA4_2021_AUST_GDA2020.shp") |>
+  dplyr::filter(STE_NAME21 == "Victoria",
+                !(SA4_CODE21 %in% c("297", "299")))
+
+regional_emp <- emp_region |>
+  tidyr::separate(series, c("SA4_NAME21", "indicator", "persons"), sep = ";") |>
+  dplyr::mutate(SA4_NAME21 = gsub(">>>|Victoria - ", "", SA4_NAME21) |> trimws("both")) |>
+  dplyr::arrange(series_id, date) |>
+  dplyr::mutate(value = slider::slide_mean(value, before = 2) |> round(1)) |>
+  dplyr::filter(date == max(date))
+
+regional_employment <- left_join(sa4, regional_emp)
+  
 ```
 
 
@@ -333,6 +313,15 @@ gg_emp <- emp |>
 #| fig-height: 5
 #| fig-align: center
 gg_emp
+```
+
+
+## ggplot maps
+
+```{r}
+gg_map <- regional_emp |>
+  ggplot(aes(fill = value)) +
+  geom_sf()
 ```
 
 
