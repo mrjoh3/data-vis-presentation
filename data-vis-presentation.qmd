@@ -3,8 +3,14 @@ title: "data-vis-presentation"
 format: 
   revealjs:
     theme: league
+    auto-stretch: false
+    slide-tone: true
     slide-number: c/t
     css: style.css
+knitr:
+  opts_chunk:
+    dev: png
+    dev.args: { bg: "transparent" }
 ---
 
 
@@ -15,23 +21,23 @@ format:
 
 ```{r}
 
-library(leaflet)
-library(leaflet.providers)
+# library(leaflet)
+# library(leaflet.providers)
 library(readabs)
 library(ggplot2)
 library(highcharter)
 library(tidyr)
 library(dplyr)
-library(sf)
 
 
-lat = -37.730202
-lon = 145.042387
-
-basemap <- leaflet() %>%
-  addProviderTiles("CartoDB.Positron", group = 'Default') |>
-  #addProviderTiles("Esri.WorldImagery", group = 'Esri Imagery') |>
-  setView(lng = lon, lat = lat, zoom = 10) 
+# 
+# lat = -37.730202
+# lon = 145.042387
+# 
+# basemap <- leaflet() %>%
+#   addProviderTiles("CartoDB.Positron", group = 'Default') |>
+#   #addProviderTiles("Esri.WorldImagery", group = 'Esri Imagery') |>
+#   setView(lng = lon, lat = lat, zoom = 10) 
 
 
 # emp <- readabs::read_abs_series(c('A84423354L', 'A84423690X'))
@@ -60,18 +66,16 @@ load("data/emp.RData")
 # save(data/emp_region, file = "emp_region.RData")
 load("data/emp_region.RData")
 
-sa4 <- sf::read_sf("data/SA4_2021_AUST_GDA2020.shp") |>
-  dplyr::filter(STE_NAME21 == "Victoria",
-                !(SA4_CODE21 %in% c("297", "299")))
+
 
 regional_emp <- emp_region |>
-  tidyr::separate(series, c("SA4_NAME21", "indicator", "persons"), sep = ";") |>
+  tidyr::separate(series, c("SA4_NAME21", "indicator", "persons"), sep = ";", remove = FALSE) |>
   dplyr::mutate(SA4_NAME21 = gsub(">>>|Victoria - ", "", SA4_NAME21) |> trimws("both")) |>
   dplyr::arrange(series_id, date) |>
   dplyr::mutate(value = slider::slide_mean(value, before = 2) |> round(1)) |>
   dplyr::filter(date == max(date))
 
-regional_employment <- left_join(sa4, regional_emp)
+
   
 ```
 
@@ -99,7 +103,7 @@ regional_employment <- left_join(sa4, regional_emp)
 
 
 
-![](https://djsir.vic.gov.au/__data/assets/image/0003/1750152/logo-djsir-black.png){.absolute bottom=0 right=50 width="219" height="66"}
+![](img/VSG DJSIR Logo_RGB_COOL GRAY 1.svg){.absolute bottom=0 right=0 width="876" height="264"}
 
 
 
@@ -181,7 +185,7 @@ R is not just for statistics
 
 ::: {.column width="40%"}
 
-:::: {.absolute bottom=0}
+:::: {.absolute bottom=0 right=50}
 ![](img/Rlogo.svg){fig-align="center"}
 
 ::::
@@ -254,9 +258,6 @@ R is not just for statistics
 - highcharter
 :::
 
-::: {.fragment fragment-index=3}
-- leaflet
-:::
 
 
 :::
@@ -277,9 +278,7 @@ R is not just for statistics
      style="max-width: 100%;">
 :::
 
-::: {.fragment .fade-in-then-out fragment-index=3}
-leaflet image
-:::
+
 
 
 
@@ -290,10 +289,77 @@ leaflet image
 
 
 
+## Some other charting libs
+
+ - plotly
+ - leaflet
+ 
+
+
+## Victorian unemployment data
+
+```{r}
+emp |>
+  dplyr::select(table_no, series, series_id, series_type, date, value)
+```
+:::: {.absolute bottom=0 right=50}
+<small>Data from [ABS Labour Force](https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia/latest-release)</small> 
+::::
+
+## Victorian regional unemployment data
+
+```{r}
+regional_emp |>
+  dplyr::select(table_no, series, series_id, series_type, date, value) |>
+  head(10)
+```
+
+:::: {.absolute bottom=0 right=50}
+<small>Data from [ABS Detailed Labour force](https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed/latest-release#all-data-downloads)</small>
+::::
+
+
+## Get spatial data
+
+
+
+Use `sf` package to process spatial data
+
+```{r}
+#| echo: true
+
+library(sf)
+
+sa4 <- sf::read_sf("data/SA4_2021_AUST_GDA2020.shp") |>
+  dplyr::filter(STE_NAME21 == "Victoria",
+                !(SA4_CODE21 %in% c("297", "299"))) |>
+  dplyr::select(SA4_NAME21)
+```
+
+
+```{r}
+regional_employment <- left_join(sa4, regional_emp)
+```
+
+:::: {.absolute bottom=0 right=50}
+<small>[ABS digital boundaries](https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files)</small>
+::::
+
 
 ## ggplot2
 
+ggplot2 has become the primary method to produce charts in R since 20XX. 
 
+:::: {.absolute bottom=0 right=50}
+<img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/ggplot2.png" 
+     align="right" 
+     width="200" 
+     style="max-width: 100%;">
+::::     
+
+
+
+## ggplot2 line chart
 
 ```{r}
 #| echo: true
@@ -307,26 +373,71 @@ gg_emp <- emp |>
     y = "unemployment rate", x = "") 
 ```
 
+<br>
 
 ```{r}
 #| fig-width: 14
-#| fig-height: 5
+#| fig-height: 4.5
 #| fig-align: center
 gg_emp
 ```
 
 
-## ggplot maps
+
+
+
+
+## ggplot map
 
 ```{r}
-gg_map <- regional_emp |>
+#| echo: true
+
+gg_map <- regional_employment |>
   ggplot(aes(fill = value)) +
-  geom_sf()
+  geom_sf() +
+  labs(title = "Victorian regional unemployment rate",
+       subtitle = paste0("Regional unemployment rates for ", 
+                         format(max(regional_employment$date), "%B %Y"))) +
+  theme_void()
+```
+## ggplot map
+
+```{r}
+#| fig-width: 9
+#| fig-height: 6
+#| fig-align: center
+
+gg_map +
+  theme(
+    plot.background = element_rect(fill = "#505050", color = "#505050"),
+    plot.title = element_text(color = "#fefefe"),
+    plot.subtitle = element_text(color = "#fefefe"),
+    plot.margin = margin(10,10,10,10),
+    panel.background = element_rect(fill = "#505050", color = "#505050"),
+    panel.grid = element_blank(),
+    legend.background = element_rect(fill='transparent', color = "#505050"), 
+    legend.box.background = element_rect(fill='transparent'), 
+    legend.text = element_text(size = rel(0.8), color = "#fefefe"),
+    legend.text.align = NULL,
+    legend.title = element_text(hjust = 0, color = "#fefefe")
+  )
 ```
 
 
 ## highcharter
 
+highcharter package built around the highcharts JS library
+
+:::: {.absolute bottom=0 right=50}
+<img src="https://jkunst.com/highcharter/logo.png" 
+     align="right" 
+     width="200" 
+     style="max-width: 100%;">
+::::     
+
+
+
+## highcharter line chart
 
 
 ```{r}
@@ -340,12 +451,94 @@ hc_emp <- emp |>
 ```
 
 
+<br>
+
 ```{r}
+#| out-width: "100%"
+ 
 hc_emp |>
-  hc_size(height = 300) |>
+  hc_size(height = 350) |>
   hc_add_theme(hc_theme_ggplot2())
 ```
 
+
+
+
+## highcharter map data
+
+
+```{r}
+#| echo: true
+
+aus_map <- hcmap(
+  "countries/au/au-all",
+  download_map_data = TRUE) |>
+  hc_size(height = 300, width = 250)
+```
+
+:::: {.center .fragment width="400" height="350"}
+
+```{r}
+#| out-width: "40%"
+#| out-extra: align-center
+aus_map
+```
+
+::::
+
+:::: {.absolute bottom=0 right=50}
+<small>[https://code.highcharts.com/mapdata/](https://code.highcharts.com/mapdata/)</small>
+::::
+
+
+
+## highcharter map data
+
+```{r}
+#| echo: true
+
+library(geojsonsf)
+
+# convert shp to json
+regional_json <- regional_employment |>
+  sf::st_simplify(dTolerance = 10) |>
+  geojsonsf::sf_geojson() 
+```
+
+
+
+
+## highcharter map
+
+
+```{r}
+#| echo: true
+
+hc_map <- highchart(type = "map") |>
+  hc_add_series(
+    name = "Unemployment",
+    mapData = regional_json,
+    data = regional_employment |> select(SA4_NAME21, value),
+    value = "value",
+    joinBy = "SA4_NAME21"  
+  ) |>
+  hc_colorAxis(min = min(regional_employment$value) |> floor(), 
+               max = max(regional_employment$value) |> ceiling()) |>
+  hc_title(text = "Victorian regional unemployment rate") |>
+  hc_subtitle(text = paste0("Regional unemployment rates for ", 
+                            format(max(regional_employment$date), "%B %Y")))
+
+```
+
+
+## highcharter map
+
+```{r}
+hc_map |>
+  hc_chart(
+    backgroundColor = "white"
+  )
+```
 
 
 ## Links
@@ -358,10 +551,4 @@ hc_emp |>
 
 
 
-## Quarto
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-```{r}
-1 + 1
-```
