@@ -203,6 +203,9 @@ R's `htmlwidgets` framework
 
 ## Charting library examples
 
+Line charts and choropleth maps
+
+
 :::: {.columns}
 
 ::: {.column width="40%"}
@@ -237,9 +240,7 @@ R's `htmlwidgets` framework
 
 ::::
 
-::: {.fragment fragment-index=3}
-from line charts to maps
-:::
+
 
 
 # Data
@@ -294,7 +295,15 @@ regional_employment <- left_join(sa4, regional_emp)
 
 # ggplot2
 
+:::: {.columns}
+
+::: {.column width="60%"}
+
 `ggplot2` was first developed in 2007. Based on the "grammar of graphics" it allows you to build a chart by iteratively adding components.
+
+:::
+
+::: {.column width="40%"}
 
 :::: {.absolute bottom=0 right=50}
 <img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/ggplot2.png" 
@@ -302,6 +311,10 @@ regional_employment <- left_join(sa4, regional_emp)
      width="200" 
      style="max-width: 100%;">
 ::::     
+
+:::
+
+::::
 
 
 ## ggplot2 line chart
@@ -364,8 +377,10 @@ gg_style <- theme(
     plot.title = element_text(color = "#fefefe"),
     plot.subtitle = element_text(color = "#fefefe"),
     plot.margin = margin(10,10,10,10),
+    
     panel.background = element_rect(fill = "#505050", color = "#505050"),
     panel.grid = element_blank(),
+    
     legend.background = element_rect(fill='transparent', color = "#505050"), 
     legend.box.background = element_rect(fill='transparent'), 
     legend.text = element_text(size = rel(0.8), color = "#fefefe"),
@@ -380,8 +395,9 @@ gg_style <- theme(
 
 ```{r}
 #| fig-width: 9
-#| fig-height: 6
+#| fig-height: 5
 #| fig-align: center
+#| echo: true
 
 gg_map + 
   theme_void() +
@@ -391,7 +407,15 @@ gg_map +
 
 # highcharter
 
+:::: {.columns}
+
+::: {.column width="60%"}
+
 `highcharter` package is a wrapper for the `highcharts` JS library
+
+:::
+
+::: {.column width="40%"}
 
 :::: {.absolute bottom=0 right=50}
 <img src="https://jkunst.com/highcharter/logo.png" 
@@ -399,6 +423,10 @@ gg_map +
      width="200" 
      style="max-width: 100%;">
 ::::     
+
+:::
+
+::::
 
 
 ## highcharter line chart
@@ -420,7 +448,7 @@ hc_emp <- emp |>
 #| out-width: "100%"
  
 hc_emp |>
-  hc_size(height = 350) |>
+  hc_size(height = 300) |>
   hc_add_theme(hc_theme_ggplot2())
 ```
 
@@ -498,42 +526,44 @@ hc_map <- highchart(type = "map") |>
 #| echo: true
 
 hc_map_theme <- highcharter::hc_theme(
-      chart = list(
-        backgroundColor = "transparent"
-      ),
-      title = list(
-        style = list(
+      chart = list(backgroundColor = "transparent"),
+      title = list(style = list(
           color = "#fefefe",
           `font-weight` =  "bold",
           `font-size` = "1.5rem",
           `background-color` = "transparent"
         )),
-      subtitle = list(
-        style = list(
+      subtitle = list(style = list(
           color = "#fefefe"
         )),
-      colorAxis = list(
-        labels = list(
+      colorAxis = list(labels = list(
           style = list(
             color = "#fefefe"))))
 ```
 
 
-## highcharter map 
+## highcharter styled map 
 
 ```{r}
+#| echo: true
+
 hc_map |> 
+  hc_size(height = 500) |>
   hc_add_theme(hc_map_theme)
 ```
 
 
+# The End
+
+
 # Links
+
 
 ## This presentation
 
-[source code](https://github.com/mrjoh3/data-vis-presentation/blob/main/data-vis-presentation.qmd)
+[source code](https://github.com/mrjoh3/data-vis-presentation/blob/main/index.qmd)
 
-[slides]()
+[slides](https://restlessdata.au/data-vis-presentation/)
 
 
 ## R resources
@@ -546,8 +576,10 @@ hc_map |>
 
 [https://ggplot2-book.org/](https://ggplot2-book.org/)
 
+[http://gallery.htmlwidgets.org/](http://gallery.htmlwidgets.org/)
 
-## DJSIR 
+
+## DJSIR Public Content
 
 [Victoria’s Economic Overview Portal](https://djsir.vic.gov.au/what-we-do/employment-and-small-business/victorian-economy)
 
