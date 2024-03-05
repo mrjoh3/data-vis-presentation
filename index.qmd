@@ -1,5 +1,6 @@
 ---
 title: "Data Visualisation and R"
+author: Matthew Johnson
 format: 
   revealjs:
     theme: league
@@ -62,12 +63,12 @@ regional_emp <- emp_region |>
   
 ```
 
+## Data Visualisation and R
+
+Using R for visualising data, examples based on 2 R packages 
 
 
-
-
-## Introduction
-
+# Introduction
 
 - trained as a freshwater ecologist
 - using R and python for almost 20 years
@@ -75,12 +76,11 @@ regional_emp <- emp_region |>
 - worked for Monash University and EPA
 
 
-
-
 ## Department of Jobs Skills and Industry 
 
 
 - data analysis
+- modelling and statistical analysis
 - economic analysis
 - data driven web content
 
@@ -103,7 +103,7 @@ R is not just for statistics
 
 - Active Community
 - Extensive capabilities
-- Reporting and web frameworks
+
 
 :::
 
@@ -126,7 +126,7 @@ R is not just for statistics
 
 R is not just for statistics
 
-- publication frameworks
+- Reporting and web frameworks
   * `rmarkdown`
   * `quarto`
   * `shiny`
@@ -151,35 +151,56 @@ R is not just for statistics
 DJSIR content is interactive, accessible and up-to-date
 
 
-## Creative Industries {background-color="white"}
+## {background-color="white"}
+
+### Tailored to client narrative 
+
+Creative Industries
 
 :::: {.v-center-container}
 <iframe src="https://creative.vic.gov.au/__data/assets/git_bridge/0003/2168544/landing_employment.html" scrolling="yes" style="height: 579px;" width="80%"></iframe>
 ::::
 
 
-## Creative Industries {background-color="white"}
+## {background-color="white"}
+
+### Matching client branding 
+
+Creative Industries
 
 :::: {.v-center-container}
 <iframe src="https://creative.vic.gov.au/__data/assets/git_bridge/0003/2168544/business02_totshare.html" scrolling="yes" style="height: 434px;" width="100%"></iframe>
 ::::
 
 
-## Victorian tourism {background-color="white"}
+## {background-color="white"}
+
+### Detailed view and download options 
+
+Victorian tourism
 
 :::: {.v-center-container}
 <iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_charts_02.html" title="Domestic day data" style="height: 420px;" width="80%"></iframe>
 ::::
 
 
-## Victorian tourism {background-color="white"}
+## {background-color="white"}
+
+### Headline summaries 
+
+Victorian tourism
 
 :::: {.v-center-container}
 <iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/total_jumbo.html" title="Victorian tourism overview data" style="height: 400px;" width="100%"></iframe>
 ::::
 
 
-## Victorian tourism {background-color="white"}
+## {background-color="white"}
+
+### Broad overviews 
+
+Victorian tourism
+
 
 :::: {.v-center-container}
 <iframe src="https://tourism.vic.gov.au/__data/assets/git_bridge/0007/2144194/dashboard_tourism_visitors.html" title="Tourism visitors summary widget" style="height: 567px;" width="100%"></iframe>
@@ -191,12 +212,44 @@ DJSIR content is interactive, accessible and up-to-date
 
 ## Charting libraries
 
-R's `htmlwidgets` framework
+Many choices plus R's `htmlwidgets` framework
+
+:::: {.columns}
+
+::: {.column width="30%"}
 
  - [plotly](https://plot.ly/r)
  - [leaflet](http://rstudio.github.io/leaflet/)
  - [networkD3](http://christophergandrud.github.io/networkD3/)
  - [ggiraph](http://davidgohel.github.io/ggiraph)
+ 
+:::
+
+::: {.column width="70%"}
+
+::: {.fragment .fade-in-then-out fragment-index=1}
+interactive charts for web and publication
+:::
+
+::: {.fragment .fade-in-then-out fragment-index=2}
+configurable interactive web mapping
+:::
+
+::: {.fragment .fade-in-then-out fragment-index=3}
+interactive D3 network charts
+:::
+
+::: {.fragment .fade-in-then-out fragment-index=4}
+makes `ggplot2` charts interactive 
+:::
+
+
+
+
+ 
+:::
+
+::::
  
 :::: {.absolute bottom=0 right=50}
 <small>[http://gallery.htmlwidgets.org/](http://gallery.htmlwidgets.org/)</small>
@@ -205,7 +258,7 @@ R's `htmlwidgets` framework
 
 ## Charting library examples
 
-Line charts and choropleth maps
+Creating and styling, line charts and choropleth maps
 
 
 :::: {.columns}
@@ -231,7 +284,7 @@ Line charts and choropleth maps
      style="max-width: 100%;">
 :::
 
-::: {.fragment .fade-in-then-out fragment-index=2}
+::: {.fragment .fade-in fragment-index=2}
 <img src="https://jkunst.com/highcharter/logo.png" 
      align="right" 
      width="200" 
@@ -242,7 +295,10 @@ Line charts and choropleth maps
 
 ::::
 
-
+::: {.fragment .fade-in fragment-index=3}
+`ggplot2` best suited for static documents like word or PDF
+`highcharter` used for web based content
+:::
 
 
 # Data
@@ -269,7 +325,7 @@ regional_emp |>
 ```
 
 :::: {.absolute bottom=0 right=50}
-<small>Data from [ABS Detailed Labour force](https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed/latest-release#all-data-downloads)</small>
+<small>Data is 3 month moving average from [ABS Detailed Labour force](https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed/latest-release#all-data-downloads)</small>
 ::::
 
 
@@ -279,6 +335,7 @@ Use `sf` and `dplyr` packages to process spatial data
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "|8"
 
 library(sf)
 
@@ -289,6 +346,19 @@ sa4 <- sf::read_sf("data/SA4_2021_AUST_GDA2020.shp") |>
 
 regional_employment <- dplyr::left_join(sa4, regional_emp)
 ```
+
+
+
+```{r}
+#| fig-width: 4
+#| fig-height: 3
+#| fig-align: left
+
+plot(regional_employment["value"], main = NULL)
+```
+
+
+
 
 :::: {.absolute bottom=0 right=50}
 <small>[ABS digital boundaries](https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files)</small>
@@ -323,6 +393,7 @@ regional_employment <- dplyr::left_join(sa4, regional_emp)
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "2|3|1,4,5,6,7,8"
 
 gg_emp <- emp |>
   ggplot(aes(x = date, y = value, colour = series_type)) +
@@ -346,6 +417,7 @@ gg_emp
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "2|3|1,4,5,6,7,8"
 
 gg_map <- regional_employment |>
   ggplot(aes(fill = value)) +
@@ -373,6 +445,7 @@ gg_map
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "2,3,4,5|7,8|10,11,12,13,14"
 
 gg_style <- theme(
     plot.background = element_rect(fill = "#505050", color = "#505050"),
@@ -393,6 +466,11 @@ gg_style <- theme(
 ```
 
 
+:::: {.absolute bottom=0 right=50}
+<small>[https://ggplot2.tidyverse.org/reference/theme.html](https://ggplot2.tidyverse.org/reference/theme.html)</small>
+::::
+
+
 ## ggplot styled map
 
 ```{r}
@@ -401,9 +479,7 @@ gg_style <- theme(
 #| fig-align: center
 #| echo: true
 
-gg_map + 
-  theme_void() +
-  gg_style
+gg_map + theme_void() + gg_style
 ```
 
 
@@ -435,6 +511,8 @@ gg_map +
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "2|3|4,5|1,6,7,8"
+
 hc_emp <- emp |>
   hchart(hcaes(x = date, y = value, group = series_type), type = "line") |>
   hc_title(text = "Victorian unemployment rate") |>
@@ -459,18 +537,19 @@ hc_emp |>
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "2|1,3,4"
 
 aus_map <- hcmap(
   "countries/au/au-all",
   borderWidth = 0.5,
-  download_map_data = TRUE) |>
-  hc_size(width = 500, height = 500)
+  download_map_data = TRUE) 
 ```
 
 ```{r}
 #| out-width: "40%"
 #| out-extra: align-center
 aus_map |>
+  hc_size(width = 500, height = 500) |>
   hc_legend(enabled = FALSE) |>
   hc_credits(enabled = FALSE)
 ```
@@ -482,12 +561,14 @@ aus_map |>
 
 ## highcharter map data
 
+convert spatial data to geojson using `geojsonsf` 
+
 ```{r}
 #| echo: true
+#| code-line-numbers: "1|4|5|3"
 
 library(geojsonsf)
 
-# convert shp to json
 regional_json <- regional_employment |>
   sf::st_simplify(dTolerance = 10) |>
   geojsonsf::sf_geojson() 
@@ -498,6 +579,7 @@ regional_json <- regional_employment |>
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "1|2,4,5|3,6,7,8,9|10|11,12,13,14|15,16,17"
 
 hc_map <- highchart(type = "map") |>
   hc_add_series(
@@ -526,6 +608,7 @@ hc_map <- highchart(type = "map") |>
 
 ```{r}
 #| echo: true
+#| code-line-numbers: "1,2|3,4,5,6,7,8|9,10,11|12,13,14"
 
 hc_map_theme <- highcharter::hc_theme(
       chart = list(backgroundColor = "transparent"),
@@ -543,22 +626,32 @@ hc_map_theme <- highcharter::hc_theme(
             color = "#fefefe"))))
 ```
 
+:::: {.absolute bottom=0 right=50}
+<small>[https://jkunst.com/highcharter/articles/themes.html](https://jkunst.com/highcharter/articles/themes.html)</small>
+::::
+
 
 ## highcharter styled map 
 
 ```{r}
 #| echo: true
 
-hc_map |> 
-  hc_size(height = 500) |>
-  hc_add_theme(hc_map_theme)
+hc_map |> hc_size(height = 500) |> hc_add_theme(hc_map_theme)
 ```
+
+
+# Conclusion
+
+- `ggplot2` and `highcharter` are versatile and adaptive
+- both have similar coding semantics
+- both are easily styled with custom themes
+
 
 
 # The End
 
 
-# Links
+# Links {.appendix}
 
 
 ## This presentation
