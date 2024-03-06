@@ -76,8 +76,7 @@ Using R for visualising data, examples based on 2 R packages
 - worked for Monash University and EPA
 
 
-## Department of Jobs Skills and Industry 
-
+## Department of Jobs, Skills, Industry and Regions
 
 - data analysis
 - modelling and statistical analysis
@@ -101,6 +100,7 @@ Using R for visualising data, examples based on 2 R packages
 
 R is not just for statistics
 
+- Open source
 - Active Community
 - Extensive capabilities
 
